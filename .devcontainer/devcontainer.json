@@ -1,7 +1,21 @@
-// For format details, see https://aka.ms/devcontainer.json
 {
-	"name": "Go",
+	"name": "Elixir",
 	"build": {
-		"dockerfile": "Dockerfile"
-	}
+		"dockerfile": "Dockerfile",
+		"args": {
+			// Elixir Version: 1.9, 1.10, 1.10.4, ...
+			"VARIANT": "latest"
+		}
+	},
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"jakebecker.elixir-ls"
+			]
+		}
+	},
+	"remoteUser": "vscode"
 }
