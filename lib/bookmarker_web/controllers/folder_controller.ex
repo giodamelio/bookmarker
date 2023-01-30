@@ -28,7 +28,8 @@ defmodule BookmarkerWeb.FolderController do
 
   def show(conn, %{"id" => id}) do
     folder = Bookmarks.get_folder!(id)
-    render(conn, :show, folder: folder)
+    children = Bookmarks.list_folder_children(id)
+    render(conn, :show, folder: folder, children: children)
   end
 
   def edit(conn, %{"id" => id}) do

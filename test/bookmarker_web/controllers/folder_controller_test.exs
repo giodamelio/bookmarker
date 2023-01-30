@@ -14,6 +14,15 @@ defmodule BookmarkerWeb.FolderControllerTest do
     end
   end
 
+  describe "show folder" do
+    setup [:create_folder]
+
+    test "shows all the children folders", %{conn: conn, folder: folder, children: children} do
+      conn = get(conn, ~p"/folders/#{folder.id}")
+      assert html_response(conn, 200) =~ "This folder has #{length(children)} children"
+    end
+  end
+
   describe "new folder" do
     test "renders form", %{conn: conn} do
       conn = get(conn, ~p"/folders/new")
@@ -78,7 +87,10 @@ defmodule BookmarkerWeb.FolderControllerTest do
   end
 
   defp create_folder(_) do
-    folder = folder_fixture()
-    %{folder: folder}
+    parent_folder = folder_fixture()
+    child_folder_1 = folder_fixture(parent_id: parent_folder.id)
+    child_folder_2 = folder_fixture(parent_id: parent_folder.id)
+    _not_a_child = folder_fixture()
+    %{folder: parent_folder, children: [child_folder_1, child_folder_2]}
   end
 end

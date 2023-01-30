@@ -22,6 +22,21 @@ defmodule Bookmarker.Bookmarks do
   end
 
   @doc """
+  Returns the list of children this folder has.
+
+  ## Examples
+
+      iex> list_folder_children(123)
+      [%Folder{}, ...]
+  """
+  def list_folder_children(id) do
+    Repo.all(
+      from f in Folder,
+        where: f.parent_id == ^id
+    )
+  end
+
+  @doc """
   Gets a single folder.
 
   Raises `Ecto.NoResultsError` if the Folder does not exist.
@@ -86,7 +101,10 @@ defmodule Bookmarker.Bookmarks do
 
   """
   def delete_folder(%Folder{} = folder) do
-    Repo.delete(folder)
+    folder
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.no_assoc_constraint(:folders)
+    |> Repo.delete()
   end
 
   @doc """

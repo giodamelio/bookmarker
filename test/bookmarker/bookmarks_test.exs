@@ -15,6 +15,15 @@ defmodule Bookmarker.BookmarksTest do
       assert Bookmarks.list_folders() == [folder]
     end
 
+    test "list_folder_children/1 returns all child folders" do
+      parent_folder = folder_fixture()
+      child_folder_1 = folder_fixture(parent_id: parent_folder.id)
+      child_folder_2 = folder_fixture(parent_id: parent_folder.id)
+      _not_a_child = folder_fixture()
+
+      assert Bookmarks.list_folder_children(parent_folder.id) == [child_folder_1, child_folder_2]
+    end
+
     test "get_folder!/1 returns the folder with given id" do
       folder = folder_fixture()
       assert Bookmarks.get_folder!(folder.id) == folder

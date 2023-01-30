@@ -13,7 +13,7 @@ defmodule Bookmarker.Bookmarks.Folder do
   @doc false
   def changeset(folder, attrs) do
     folder
-    |> cast(attrs, [:title, :index])
+    |> cast(attrs, [:title, :index, :parent_id])
     |> validate_required([:title, :index])
   end
 end

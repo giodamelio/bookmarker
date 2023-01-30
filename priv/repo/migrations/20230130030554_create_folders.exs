@@ -3,8 +3,8 @@ defmodule Bookmarker.Repo.Migrations.CreateFolders do
 
   def change do
     create table(:folders) do
-      add :title, :string
-      add :index, :integer
+      add :title, :string, null: false
+      add :index, :integer, null: false
       add :parent_id, references(:folders, on_delete: :nothing)
 
       timestamps()
