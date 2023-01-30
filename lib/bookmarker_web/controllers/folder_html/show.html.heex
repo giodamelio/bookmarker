@@ -1,0 +1,16 @@
+<.header>
+  Folder <%= @folder.id %>
+  <:subtitle>This is a folder record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/folders/#{@folder}/edit"}>
+      <.button>Edit folder</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @folder.title %></:item>
+  <:item title="Index"><%= @folder.index %></:item>
+</.list>
+
+<.back navigate={~p"/folders"}>Back to folders</.back>

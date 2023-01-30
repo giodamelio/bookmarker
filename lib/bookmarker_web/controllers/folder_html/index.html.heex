@@ -1,0 +1,24 @@
+<.header>
+  Listing Folders
+  <:actions>
+    <.link href={~p"/folders/new"}>
+      <.button>New Folder</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="folders" rows={@folders} row_click={&JS.navigate(~p"/folders/#{&1}")}>
+  <:col :let={folder} label="Title"><%= folder.title %></:col>
+  <:col :let={folder} label="Index"><%= folder.index %></:col>
+  <:action :let={folder}>
+    <div class="sr-only">
+      <.link navigate={~p"/folders/#{folder}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/folders/#{folder}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={folder}>
+    <.link href={~p"/folders/#{folder}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
