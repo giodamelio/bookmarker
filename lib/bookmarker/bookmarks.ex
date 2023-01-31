@@ -6,8 +6,6 @@ defmodule Bookmarker.Bookmarks do
   alias Bookmarker.Bookmarks.Folder
   alias RedisGraph.{Node, Edge, Graph, QueryResult}
 
-  @graph_name "bookmarker"
-
   @doc """
   Returns the list of folders.
 
@@ -18,14 +16,7 @@ defmodule Bookmarker.Bookmarks do
 
   """
   def list_folders do
-    query = "MATCH (f:folder) RETURN f"
-    {:ok, query_result} = RedisGraph.query(:main, @graph_name, query)
-
-    query_result
-    |> QueryResult.results_to_maps()
-    |> IO.inspect()
-
-    # IO.puts(QueryResult.pretty_print(query_result))
+    []
   end
 
   @doc """
@@ -37,10 +28,7 @@ defmodule Bookmarker.Bookmarks do
       [%Folder{}, ...]
   """
   def list_folder_children(id) do
-    # Repo.all(
-    #   from f in Folder,
-    #     where: f.parent_id == ^id
-    # )
+    []
   end
 
   @doc """
@@ -58,7 +46,7 @@ defmodule Bookmarker.Bookmarks do
 
   """
   def get_folder!(id) do
-    # Repo.get!(Folder, id)
+    %Folder{}
   end
 
   @doc """
@@ -76,20 +64,6 @@ defmodule Bookmarker.Bookmarks do
   def create_folder(folder \\ %{}) do
     folder = struct(%Folder{}, folder)
 
-    node =
-      Node.new(%{
-        label: "folder",
-        properties: %{
-          title: folder.title
-        }
-      })
-
-    {graph, _node} =
-      %{name: @graph_name}
-      |> Graph.new()
-      |> Graph.add_node(node)
-
-    {:ok, _result} = RedisGraph.commit(:main, graph)
     {:ok, folder}
   end
 

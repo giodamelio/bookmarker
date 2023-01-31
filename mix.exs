@@ -51,9 +51,7 @@ defmodule Bookmarker.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:redix, "~> 1.1"},
-      {:castore, ">= 0.0.0"},
-      {:redisgraph, "~> 0.1.0"}
+      {:libgraph, "~> 0.16.0"}
     ]
   end
 

@@ -17,9 +17,7 @@ defmodule Bookmarker.Application do
       # Start Finch
       {Finch, name: Bookmarker.Finch},
       # Start the Endpoint (http/https)
-      BookmarkerWeb.Endpoint,
-      # Start the Redis connection
-      {Redix, name: :main}
+      BookmarkerWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
