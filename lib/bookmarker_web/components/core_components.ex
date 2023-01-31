@@ -537,25 +537,6 @@ defmodule BookmarkerWeb.CoreComponents do
     """
   end
 
-  @doc """
-  Renders a link with an arrow
-
-  ## Examples
-
-      <.arrowlink href={~p"/posts"}>Go</.back>
-  """
-  attr :href, :any, required: true
-  slot :inner_block, required: true
-
-  def arrowlink(assigns) do
-    ~H"""
-    <.link href={@href} class="underline">
-      <%= render_slot(@inner_block) %>
-      <Heroicons.arrow_right solid class="w-3 h-3 stroke-current inline" />
-    </.link>
-    """
-  end
-
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do
