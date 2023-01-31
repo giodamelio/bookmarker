@@ -3,3 +3,6 @@
 
 go:
   mix phx.server
+
+redis:
+  redis-cli

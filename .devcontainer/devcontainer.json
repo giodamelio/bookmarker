@@ -1,12 +1,8 @@
 {
 	"name": "Elixir",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": {
-			// Elixir Version: 1.9, 1.10, 1.10.4, ...
-			"VARIANT": "latest"
-		}
-	},
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "elixir",
+	"workspaceFolder": "/workspace",
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
@@ -18,5 +14,9 @@
 			]
 		}
 	},
+	"forwardPorts": [
+		4000,
+		6379
+	],
 	"remoteUser": "vscode"
 }
