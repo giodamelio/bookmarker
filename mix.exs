@@ -52,7 +52,8 @@ defmodule Bookmarker.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:redix, "~> 1.1"},
-      {:castore, ">= 0.0.0"}
+      {:castore, ">= 0.0.0"},
+      {:redisgraph, "~> 0.1.0"}
     ]
   end
 

@@ -1,5 +1,5 @@
 defmodule Bookmarker.BookmarksTest do
-  use Bookmarker.DataCase
+  use ExUnit.Case
 
   alias Bookmarker.Bookmarks
 
@@ -30,10 +30,9 @@ defmodule Bookmarker.BookmarksTest do
     end
 
     test "create_folder/1 with valid data creates a folder" do
-      valid_attrs = %{index: 42, title: "some title"}
+      valid_attrs = %{title: "some title"}
 
       assert {:ok, %Folder{} = folder} = Bookmarks.create_folder(valid_attrs)
-      assert folder.index == 42
       assert folder.title == "some title"
     end
 

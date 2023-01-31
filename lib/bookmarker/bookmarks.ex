@@ -3,10 +3,10 @@ defmodule Bookmarker.Bookmarks do
   The Bookmarks context.
   """
 
-  import Ecto.Query, warn: false
-  alias Bookmarker.Repo
-
   alias Bookmarker.Bookmarks.Folder
+  alias RedisGraph.{Node, Edge, Graph, QueryResult}
+
+  @graph_name "bookmarker"
 
   @doc """
   Returns the list of folders.
@@ -18,7 +18,14 @@ defmodule Bookmarker.Bookmarks do
 
   """
   def list_folders do
-    Repo.all(Folder)
+    query = "MATCH (f:folder) RETURN f"
+    {:ok, query_result} = RedisGraph.query(:main, @graph_name, query)
+
+    query_result
+    |> QueryResult.results_to_maps()
+    |> IO.inspect()
+
+    # IO.puts(QueryResult.pretty_print(query_result))
   end
 
   @doc """
@@ -30,10 +37,10 @@ defmodule Bookmarker.Bookmarks do
       [%Folder{}, ...]
   """
   def list_folder_children(id) do
-    Repo.all(
-      from f in Folder,
-        where: f.parent_id == ^id
-    )
+    # Repo.all(
+    #   from f in Folder,
+    #     where: f.parent_id == ^id
+    # )
   end
 
   @doc """
@@ -50,7 +57,9 @@ defmodule Bookmarker.Bookmarks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_folder!(id), do: Repo.get!(Folder, id)
+  def get_folder!(id) do
+    # Repo.get!(Folder, id)
+  end
 
   @doc """
   Creates a folder.
@@ -64,10 +73,24 @@ defmodule Bookmarker.Bookmarks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_folder(attrs \\ %{}) do
-    %Folder{}
-    |> Folder.changeset(attrs)
-    |> Repo.insert()
+  def create_folder(folder \\ %{}) do
+    folder = struct(%Folder{}, folder)
+
+    node =
+      Node.new(%{
+        label: "folder",
+        properties: %{
+          title: folder.title
+        }
+      })
+
+    {graph, _node} =
+      %{name: @graph_name}
+      |> Graph.new()
+      |> Graph.add_node(node)
+
+    {:ok, _result} = RedisGraph.commit(:main, graph)
+    {:ok, folder}
   end
 
   @doc """
@@ -82,10 +105,11 @@ defmodule Bookmarker.Bookmarks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_folder(%Folder{} = folder, attrs) do
-    folder
-    |> Folder.changeset(attrs)
-    |> Repo.update()
+  # def update_folder(%Folder{} = folder, attrs) do
+  def update_folder(folder, attrs) do
+    # folder
+    # |> Folder.changeset(attrs)
+    # |> Repo.update()
   end
 
   @doc """
@@ -100,23 +124,15 @@ defmodule Bookmarker.Bookmarks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_folder(%Folder{} = folder) do
-    folder
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.no_assoc_constraint(:folders)
-    |> Repo.delete()
+  # def delete_folder(%Folder{} = folder) do
+  def delete_folder(folder) do
+    # folder
+    # |> Ecto.Changeset.change()
+    # |> Ecto.Changeset.no_assoc_constraint(:folders)
+    # |> Repo.delete()
   end
 
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking folder changes.
-
-  ## Examples
-
-      iex> change_folder(folder)
-      %Ecto.Changeset{data: %Folder{}}
-
-  """
-  def change_folder(%Folder{} = folder, attrs \\ %{}) do
-    Folder.changeset(folder, attrs)
+  def change_folder(folder, attrs \\ %{}) do
+    %{}
   end
 end

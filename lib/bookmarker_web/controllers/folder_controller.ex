@@ -10,7 +10,7 @@ defmodule BookmarkerWeb.FolderController do
   end
 
   def new(conn, _params) do
-    changeset = Bookmarks.change_folder(%Folder{})
+    changeset = Bookmarks.change_folder()
     render(conn, :new, changeset: changeset)
   end
 
