@@ -1,0 +1,17 @@
+<.header>
+  Edge <%= @edge.id %>
+  <:subtitle>This is a edge record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/edges/#{@edge}/edit"}>
+      <.button>Edit edge</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="V1"><%= @edge.v1 %></:item>
+  <:item title="V2"><%= @edge.v2 %></:item>
+  <:item title="Label"><%= @edge.label %></:item>
+</.list>
+
+<.back navigate={~p"/edges"}>Back to edges</.back>

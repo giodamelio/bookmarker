@@ -1,0 +1,24 @@
+<.header>
+  Listing Bookmarks
+  <:actions>
+    <.link href={~p"/bookmarks/new"}>
+      <.button>New Bookmark</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="bookmarks" rows={@bookmarks} row_click={&JS.navigate(~p"/bookmarks/#{&1}")}>
+  <:col :let={bookmark} label="Title"><%= bookmark.title %></:col>
+  <:col :let={bookmark} label="Url"><%= bookmark.url %></:col>
+  <:action :let={bookmark}>
+    <div class="sr-only">
+      <.link navigate={~p"/bookmarks/#{bookmark}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/bookmarks/#{bookmark}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={bookmark}>
+    <.link href={~p"/bookmarks/#{bookmark}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>

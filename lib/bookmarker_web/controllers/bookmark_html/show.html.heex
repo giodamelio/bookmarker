@@ -1,0 +1,16 @@
+<.header>
+  Bookmark <%= @bookmark.id %>
+  <:subtitle>This is a bookmark record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/bookmarks/#{@bookmark}/edit"}>
+      <.button>Edit bookmark</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @bookmark.title %></:item>
+  <:item title="Url"><%= @bookmark.url %></:item>
+</.list>
+
+<.back navigate={~p"/bookmarks"}>Back to bookmarks</.back>
