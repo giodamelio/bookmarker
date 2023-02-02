@@ -3,9 +3,9 @@ defmodule Bookmarker.Repo.Migrations.CreateEdges do
 
   def change do
     create table(:edges) do
-      add :v1, :string
-      add :v2, :string
-      add :label, :string
+      add :v1, :string, null: false
+      add :v2, :string, null: false
+      add :label, :string, null: false
 
       timestamps()
     end

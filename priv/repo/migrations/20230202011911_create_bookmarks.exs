@@ -3,8 +3,8 @@ defmodule Bookmarker.Repo.Migrations.CreateBookmarks do
 
   def change do
     create table(:bookmarks) do
-      add :title, :string
-      add :url, :string
+      add :title, :string, null: false
+      add :url, :string, null: false
 
       timestamps()
     end

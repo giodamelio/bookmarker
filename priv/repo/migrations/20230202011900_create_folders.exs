@@ -3,7 +3,7 @@ defmodule Bookmarker.Repo.Migrations.CreateFolders do
 
   def change do
     create table(:folders) do
-      add :title, :string
+      add :title, :string, null: false
 
       timestamps()
     end
