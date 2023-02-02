@@ -8,6 +8,7 @@
 </.header>
 
 <.table id="bookmarks" rows={@bookmarks} row_click={&JS.navigate(~p"/bookmarks/#{&1}")}>
+  <:col :let={bookmark} label="ID"><%= bookmark.id %></:col>
   <:col :let={bookmark} label="Title"><%= bookmark.title %></:col>
   <:col :let={bookmark} label="Url"><%= bookmark.url %></:col>
   <:action :let={bookmark}>

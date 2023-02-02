@@ -8,6 +8,7 @@
 </.header>
 
 <.table id="folders" rows={@folders} row_click={&JS.navigate(~p"/folders/#{&1}")}>
+  <:col :let={folder} label="ID"><%= folder.id %></:col>
   <:col :let={folder} label="Title"><%= folder.title %></:col>
   <:action :let={folder}>
     <div class="sr-only">
