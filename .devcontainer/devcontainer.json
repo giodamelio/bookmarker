@@ -1,8 +1,8 @@
 {
 	"name": "Elixir",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "elixir",
+	"workspaceFolder": "/workspace",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -11,5 +11,9 @@
 			]
 		}
 	},
+	"forwardPorts": [
+		4000,
+		6379
+	],
 	"remoteUser": "vscode"
 }
