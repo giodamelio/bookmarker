@@ -17,9 +17,9 @@ defmodule Bookmarker.Application do
       # Start Finch
       {Finch, name: Bookmarker.Finch},
       # Start the Endpoint (http/https)
-      BookmarkerWeb.Endpoint,
-      # Start the Bookmarks GenServer
-      Bookmarker.Worker.Bookmarks
+      BookmarkerWeb.Endpoint
+      # Start a worker by calling: Bookmarker.Worker.start_link(arg)
+      # {Bookmarker.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

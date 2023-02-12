@@ -18,10 +18,6 @@ defmodule BookmarkerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-
-    resources "/folders", FolderController
-    resources "/bookmarks", BookmarkController
-    resources "/edges", EdgeController
   end
 
   # Other scopes may use custom stacks.

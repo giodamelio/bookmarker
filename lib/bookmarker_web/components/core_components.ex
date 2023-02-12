@@ -11,7 +11,6 @@ defmodule BookmarkerWeb.CoreComponents do
   """
   use Phoenix.Component
 
-  alias Phoenix.HTML.Link
   alias Phoenix.LiveView.JS
   import BookmarkerWeb.Gettext
 
@@ -535,36 +534,6 @@ defmodule BookmarkerWeb.CoreComponents do
         <%= render_slot(@inner_block) %>
       </.link>
     </div>
-    """
-  end
-
-  @doc """
-  Renders a link with a class when active
-
-  ## Examples
-
-      <.active_link href={~p"/posts"}>Posts</.back>
-  """
-  attr :href, :any, required: true
-  attr :current_path, :any, required: true
-  slot :inner_block, required: true
-
-  def active_link(assigns) do
-    assigns =
-      assign(
-        assigns,
-        :is_active,
-        if String.ends_with?(assigns.href, hd(assigns.current_path)) do
-          "font-medium"
-        else
-          ""
-        end
-      )
-
-    ~H"""
-    <.link href={@href} class={@is_active}>
-      <%= render_slot(@inner_block) %>
-    </.link>
     """
   end
 
