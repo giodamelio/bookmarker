@@ -1,21 +1,26 @@
 defmodule Bookmarker.RedisgraphTest do
-  use ExUnit.Case
+  use Bookmarker.RedisCase
 
   alias Bookmarker.RedisGraph
 
   describe "decode/1" do
-    test "basic decode" do
-      # {:ok, result} = RedisGraph.graph_command("MATCH (b:Bookmark) RETURN b, 10 as num")
+    test "basic decode", %{redis_conn: conn} do
       {:ok, result} =
-        RedisGraph.graph_command("MATCH (a)-[e]->(b) RETURN a, e, b.name as fruit_name")
+        RedisGraph.graph_command(conn, "MATCH (a)-[e]->(b) RETURN a, e, b.name as fruit_name")
 
-      assert result == nil
+      assert result == []
+    end
+
+    test "basic write", %{redis_conn: conn} do
+      {:ok, result} = RedisGraph.graph_command(conn, "CREATE (b:Bookmark {}) RETURN b")
+
+      assert result == [%{"b" => %{id: 0, labels: ["Bookmark"], properties: %{}}}]
+    end
+
+    test "basic read", %{redis_conn: conn} do
+      {:ok, result} = RedisGraph.graph_command(conn, "MATCH (b:Bookmark) RETURN b")
+
+      assert result == []
     end
   end
-
-  # describe "to_cypher/1" do
-  #   test "basic map" do
-  #     assert RedisGraph.to_cypher(%{aaa: "bbb", ccc: "ddd"}) == ~S|{ aaa: "bbb", ccc: "ddd" }|
-  #   end
-  # end
 end
