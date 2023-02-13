@@ -50,7 +50,10 @@ defmodule Bookmarker.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:redix, "~> 1.1"},
+      {:castore, ">= 0.0.0"},
+      {:ex_cypher, "~> 0.3.1"}
     ]
   end
 
