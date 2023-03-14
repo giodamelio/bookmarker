@@ -3,7 +3,7 @@
 
 # Start a dev shell
 dev:
-  devbox shell
+  devenv shell fish
 
 # Start the Phoenix server
 go:

@@ -37,3 +37,8 @@ npm-debug.log
 
 # Local Mix dir
 .mix/
+
+# Devenv
+.devenv*
+devenv.local.nix
+
