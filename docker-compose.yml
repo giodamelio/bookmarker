@@ -2,9 +2,6 @@ version: "3"
 
 services:
   database:
-    image: "neo4j"
+    image: redis/redis-stack-server
     ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      NEO4J_AUTH: none
+      - "6379:6379"
