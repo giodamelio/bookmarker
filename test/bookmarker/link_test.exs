@@ -1,16 +1,14 @@
 defmodule Bookmarker.LinkTest do
   use Bookmarker.RedisCase
 
-  alias Bookmarker.RedisGraph
+  alias Bookmarker.Link
 
-  @db "main"
+  describe "create/1" do
+    test "create a link node" do
+      link = Link.create(%{title: "Reddit", url: "https://reddit.com"})
 
-  describe "graph_command/2" do
-    test "simple node creation", %{redis_conn: conn} do
-      {:ok, [result]} =
-        RedisGraph.graph_command(conn, @db, "CREATE (p:Person {name:'Kirsten'}) RETURN p")
-
-      assert result["p"].properties["name"] == "Kirsten"
+      assert link.title == "Reddit"
+      assert link.url == "https://reddit.com"
     end
   end
 end
