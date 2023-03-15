@@ -18,5 +18,11 @@
       entry = "mix credo";
       pass_filenames = false;
     };
+    mix-test = {
+      enable = true;
+      name = "Mix Test";
+      entry = "mix test";
+      pass_filenames = false;
+    };
   };
 }
