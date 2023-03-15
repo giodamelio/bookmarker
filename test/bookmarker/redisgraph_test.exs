@@ -8,7 +8,7 @@ defmodule Bookmarker.RedisgraphTest do
   describe "graph_command/2" do
     test "simple node creation", %{redis_conn: conn} do
       {:ok, [result]} =
-        RedisGraph.graph_command(conn, "CREATE (p:Person {name:'Kirsten'}) RETURN p")
+        RedisGraph.graph_command(conn, @db, "CREATE (p:Person {name:'Kirsten'}) RETURN p")
 
       assert result["p"].properties["name"] == "Kirsten"
     end
@@ -37,7 +37,7 @@ defmodule Bookmarker.RedisgraphTest do
           "--compact"
         ])
 
-      {:ok, [val1, val2]} = RedisGraph.decode(conn, results)
+      {:ok, [val1, val2]} = RedisGraph.decode(conn, @db, results)
       assert val1["p1"].properties["name"] == "Gio"
       assert val1["p2"].properties["name"] == "Sophie"
       assert val2["p1"].properties["name"] == "Sophie"
@@ -47,11 +47,11 @@ defmodule Bookmarker.RedisgraphTest do
 
   describe "decode_value/2" do
     test "string", %{redis_conn: conn} do
-      assert RedisGraph.decode_value(conn, [2, "testing"]) == "testing"
+      assert RedisGraph.decode_value(conn, @db, [2, "testing"]) == "testing"
     end
 
     test "integer", %{redis_conn: conn} do
-      assert RedisGraph.decode_value(conn, [3, "100"]) == 100
+      assert RedisGraph.decode_value(conn, @db, [3, "100"]) == 100
     end
 
     test "edge", %{redis_conn: conn} do
@@ -63,7 +63,7 @@ defmodule Bookmarker.RedisgraphTest do
           "--compact"
         ])
 
-      val = RedisGraph.decode_value(conn, result)
+      val = RedisGraph.decode_value(conn, @db, result)
       assert val.properties == %{"test" => "HAHA"}
       assert val.type == "Sibling"
     end
@@ -77,7 +77,7 @@ defmodule Bookmarker.RedisgraphTest do
           "--compact"
         ])
 
-      val = RedisGraph.decode_value(conn, result)
+      val = RedisGraph.decode_value(conn, @db, result)
       assert val.labels == ["Person"]
       assert val.properties == %{"name" => "Gio"}
     end
