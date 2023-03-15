@@ -49,7 +49,8 @@ defmodule Bookmarker.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:redix, "~> 1.2"},
       {:castore, ">= 0.0.0"},
-      {:ecto, "~> 3.9"}
+      {:ecto, "~> 3.9"},
+      {:credo, "~> 1.7.0-rc.2", only: [:dev, :test], runtime: false}
     ]
   end
 

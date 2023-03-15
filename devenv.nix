@@ -10,4 +10,13 @@
 
   languages.nix.enable = true;
   languages.elixir.enable = true;
+
+  pre-commit.hooks = {
+    credo = {
+      enable = true;
+      name = "Credo";
+      entry = "mix credo";
+      pass_filenames = false;
+    };
+  };
 }
