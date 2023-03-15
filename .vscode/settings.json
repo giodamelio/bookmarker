@@ -1,0 +1,7 @@
+{
+    "createTest.srcFileExtension": ".ex",
+    "createTest.srcFolder": "lib",
+    "createTest.testFileExtension": "_test.exs",
+    "createTest.testFolder": "test",
+    "createTest.testFileTemplate": []
+}
