@@ -1,81 +1,134 @@
 defmodule Bookmarker.Cypher do
+  import Kernel, except: [node: 1]
+
   def cypher(clauses) when is_list(clauses) do
-    Enum.join(clauses, " ")
+    if !Keyword.keyword?(clauses) do
+      raise "clauses must be a keyword list"
+    end
+
+    clauses
+    |> Enum.map(&cypher/1)
+    |> Enum.join(" ")
   end
 
-  # Create a CREATE clause
-  def create(clauses) when is_list(clauses) do
-    clauses =
-      clauses
-      |> Enum.map(&string_or_cypher/1)
+  # CREATE clause
+  def cypher({:create, binding}) when is_atom(binding) do
+    "CREATE #{node(binding)}"
+  end
+
+  def cypher({:create, {binding, labels}}) when is_atom(binding) and is_list(labels) do
+    ~s|CREATE #{node({binding, labels})}|
+  end
+
+  def cypher({:create, {binding, labels, properties}})
+      when is_atom(binding) and is_list(labels) and is_map(properties) do
+    ~s|CREATE #{node({binding, labels, properties})}|
+  end
+
+  def cypher({:create, {node1, "-", relation, "->", node2}}) do
+    ~s|CREATE #{node(node1)}-#{relationship(relation)}->#{node(node2)}|
+  end
+
+  def cypher({:create, {node1, "<-", relation, "-", node2}}) do
+    ~s|CREATE #{node(node1)}<-#{relationship(relation)}-#{node(node2)}|
+  end
+
+  def cypher({:create, nodes}) when is_list(nodes) do
+    nodes =
+      nodes
+      |> Enum.map(&node/1)
       |> Enum.join(", ")
 
-    "CREATE #{clauses}"
+    "CREATE #{nodes}"
   end
 
-  def create(clause) do
-    "CREATE #{clause}"
+  # MATCH clause
+  def cypher({:match, binding}) when is_atom(binding) do
+    "MATCH #{node(binding)}"
   end
 
-  # Create a MATCH clause
-  def match(clauses) when is_list(clauses) do
-    clauses =
-      clauses
-      |> Enum.map(&string_or_cypher/1)
+  def cypher({:match, {binding, labels}}) when is_atom(binding) and is_list(labels) do
+    ~s|MATCH #{node({binding, labels})}|
+  end
+
+  def cypher({:match, {binding, labels, properties}})
+      when is_atom(binding) and is_list(labels) and is_map(properties) do
+    ~s|MATCH #{node({binding, labels, properties})}|
+  end
+
+  # WHERE clause
+  def cypher({:where, condition}) when is_binary(condition) do
+    "WHERE #{condition}"
+  end
+
+  # DELETE clause
+  def cypher({:delete, binding}) do
+    "DELETE #{binding}"
+  end
+
+  # DETACH DELETE clause
+  def cypher({:detach_delete, binding}) do
+    "DETACH DELETE #{binding}"
+  end
+
+  # SET clause
+  def cypher({:set, {expression, value}}) do
+    "SET #{expression} = #{to_cypher(value)}"
+  end
+
+  def cypher({:set, expression}) do
+    "SET #{expression}"
+  end
+
+  # RETURN clause
+  def cypher({:return, bindings}) when is_list(bindings) do
+    bindings =
+      bindings
       |> Enum.join(", ")
 
-    "MATCH #{clauses}"
+    "RETURN #{bindings}"
   end
 
-  def match(clause) do
-    "MATCH #{clause}"
+  def cypher({:return, binding}), do: cypher({:return, [binding]})
+
+  # ORDER BY clause
+  def cypher({:order_by, expressions}) when is_list(expressions) do
+    expressions =
+      expressions
+      |> Enum.join(", ")
+
+    "ORDER BY #{expressions}"
   end
 
-  # Create a RETURN clause
-  def return(bindings) when is_list(bindings) do
-    "RETURN #{Enum.join(bindings, ", ")}"
-  end
+  def cypher({:order_by, expression}), do: cypher({:order_by, [expression]})
 
-  def return(binding) do
-    "RETURN #{binding}"
+  # LIMIT clause
+  def cypher({:limit, count}) do
+    "LIMIT #{count}"
   end
 
   # Create a node
-  def node(binding) do
+  defp node(binding) when is_atom(binding) do
     "(#{binding})"
   end
 
-  def node(binding, labels) do
-    "(#{binding}:#{node_labels(labels)})"
+  defp node({binding, labels}) when is_atom(binding) and is_list(labels) do
+    ~s|(#{binding}:#{Enum.join(labels, ":")})|
   end
 
-  def node(binding, labels, properties) do
-    "(#{binding}:#{node_labels(labels)} #{to_cypher(properties)})"
+  defp node({binding, labels, properties})
+       when is_atom(binding) and is_list(labels) and is_map(properties) do
+    ~s|(#{binding}:#{Enum.join(labels, ":")} #{to_cypher(properties)})|
   end
 
   # Create a relationship
-  def relationship(node1, relation, node2) when is_atom(relation) do
-    "#{node1}-[:#{relation}]->#{node2}"
+  defp relationship({binding, label}) do
+    ~s|[#{binding}:#{label}]|
   end
 
-  def relationship(node1, {binding, relation}, node2) when is_atom(relation) do
-    "#{node1}-[#{binding}:#{relation}]->#{node2}"
+  defp relationship({binding, label, properties}) when is_map(properties) do
+    ~s|[#{binding}:#{label} #{to_cypher(properties)}]|
   end
-
-  def relationship(node1, {binding, relation, properties}, node2) when is_atom(relation) do
-    "#{node1}-[#{binding}:#{relation} #{to_cypher(properties)}]->#{node2}"
-  end
-
-  # Convert one or more labels to a string
-  defp node_labels(label) when is_atom(label), do: node_labels([label])
-
-  defp node_labels(labels) when is_list(labels) do
-    Enum.join(labels, ":")
-  end
-
-  # Convert a value to Cypher if it is not a string
-  defp string_or_cypher(data) when is_binary(data), do: data
-  defp string_or_cypher(data), do: to_cypher(data)
 
   # Convert an Elixir value to a Cypher value
   defp to_cypher(data) when is_struct(data) do
