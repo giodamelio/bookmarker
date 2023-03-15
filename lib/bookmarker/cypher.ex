@@ -6,9 +6,7 @@ defmodule Bookmarker.Cypher do
       raise "clauses must be a keyword list"
     end
 
-    clauses
-    |> Enum.map(&cypher/1)
-    |> Enum.join(" ")
+    Enum.map_join(clauses, " ", &cypher/1)
   end
 
   # CREATE clause
@@ -34,11 +32,7 @@ defmodule Bookmarker.Cypher do
   end
 
   def cypher({:create, nodes}) when is_list(nodes) do
-    nodes =
-      nodes
-      |> Enum.map(&node/1)
-      |> Enum.join(", ")
-
+    nodes = Enum.map_join(nodes, ", ", &node/1)
     "CREATE #{nodes}"
   end
 
@@ -146,14 +140,13 @@ defmodule Bookmarker.Cypher do
   defp to_cypher(data) when is_map(data) do
     data
     |> Map.to_list()
-    |> Enum.map(fn {key, value} ->
+    |> Enum.map_join(", ", fn {key, value} ->
       if value == nil do
         "null"
       else
         "#{to_string(key)}: #{to_cypher(value)}"
       end
     end)
-    |> Enum.join(", ")
     |> then(&"{#{&1}}")
   end
 

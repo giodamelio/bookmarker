@@ -4,9 +4,9 @@ defmodule Bookmarker.RedisGraph do
   end
 
   def graph_command(conn, db, command) do
-    with {:ok, response} = redis_command(conn, ["GRAPH.QUERY", db, command, "--compact"]),
-         {:ok, results} = decode(conn, db, response),
-         do: {:ok, results}
+    with {:ok, response} <- redis_command(conn, ["GRAPH.QUERY", db, command, "--compact"]) do
+      decode(conn, db, response)
+    end
   end
 
   def decode(conn, db, [header, results, _stats]) do
@@ -88,7 +88,7 @@ defmodule Bookmarker.RedisGraph do
   end
 
   def decode_value(_conn, _db, [type, value]) do
-    throw("Unknown value of type #{type} with a value of #{IO.inspect(value)}")
+    throw("Unknown value of type #{type} with a value of #{value}")
   end
 
   def lookup_label(conn, db, id) do

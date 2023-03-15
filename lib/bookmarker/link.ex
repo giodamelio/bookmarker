@@ -23,7 +23,7 @@ defmodule Bookmarker.Link do
 
   # Create a Link
   def create(attrs) do
-    with {:ok, link} =
+    with {:ok, link} <-
            %Link{}
            |> changeset(attrs)
            |> apply_action(:insert),
@@ -33,7 +33,7 @@ defmodule Bookmarker.Link do
              create: {:l, [:Link], link},
              return: :l
            ),
-         {:ok, redis_result} = RedisGraph.graph_command(:main, @db, query) do
+         {:ok, redis_result} <- RedisGraph.graph_command(:main, @db, query) do
       redis_result
       |> get_in([Access.at(0), "l", :id])
       |> then(&Map.put(link, :id, &1))
