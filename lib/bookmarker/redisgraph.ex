@@ -126,39 +126,4 @@ defmodule Bookmarker.RedisGraph do
         raise("More then one #{type} saved for a single ID")
     end
   end
-
-  def to_cypher(data) when is_struct(data) do
-    data
-    |> Map.from_struct()
-    |> to_cypher()
-  end
-
-  def to_cypher(data) when is_map(data) and is_map_key(data, :__meta__) do
-    data
-    |> Map.delete(:__meta__)
-    |> to_cypher()
-  end
-
-  def to_cypher(data) when is_map(data) do
-    data
-    |> Map.to_list()
-    |> Enum.map(fn {key, value} ->
-      if value == nil do
-        nil
-      else
-        "#{to_string(key)}: #{to_cypher(value)}"
-      end
-    end)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.join(", ")
-    |> then(&"{ #{&1} }")
-  end
-
-  def to_cypher(data) when is_binary(data) do
-    ~s|"#{data}"|
-  end
-
-  def to_cypher(data) do
-    to_string(data)
-  end
 end
